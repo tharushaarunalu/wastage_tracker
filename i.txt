@@ -1,0 +1,67 @@
+ඔබේ පරිගණකයට Android Studio හෝ බර මෘදුකාංග Install නොකර, අන්තර්ජාලය (Cloud) හරහා APK එක හදාගන්න සම්පූර්ණයෙන්ම නොමිලයේ පුළුවන් ක්‍රමයක් තියෙනවා.
+
+ඔබ "Git එකත් හරි" කියලා කියපු නිසා, ලේසිම සහ හොඳම ක්‍රමය තමයි GitHub Actions භාවිත කිරීම.
+
+මම දැන් ඔබේ Project Folder එක (wastage_tracker) ඇතුලේ, අන්තර්ජාලය හරහා APK එකක් නිර්මාණය කරන්න අවශ්‍ය කරන GitHub Workflow (.github/workflows/build_apk.yml) ෆයිල් එක හැදුවා.
+
+මෙන්න මේ ලේසි පියවර ටික විතරයි ඔයා කරන්න ඕනේ:
+
+🚀 පියවර 1: GitHub වෙත Code එක Upload කිරීම
+පහත විධානයන් (Commands) Terminal එකේ දීලා මේ Project එක ඔබේ අලුත් GitHub Repository එකකට Push කරන්න (ඔබේ Git වලින් තවමත් මේක Push කරලා නැත්නම්).
+
+bash
+cd c:\Users\DELL\Desktop\SATA\westage\wastage_tracker
+git init
+git add .
+git commit -m "Initial Commit - Added GitHub Actions"
+ඉන්පසු GitHub.com එකට ගොස් අලුත් Repository එකක් සාදාගෙන, එහි ඇති Remote URL එක ලබාදී අදාළ Code එක Push කරන්න.
+
+bash
+git branch -M main
+git remote add origin https://github.com/ඔයාගේ_Username_එක/ඔයාගේ_Repo_එක.git
+git push -u origin main
+(දැන් මුළු Code එකම අර මම හදපු yml ෆයිල් එකත් එක්කම GitHub එකට ගිහින් ඇති).
+
+📦 පියවර 2: APK එක Download කරගැනීම!
+ඔබේ Code එක GitHub එකට Push කරපු ගමන්ම, GitHub Cloud පරිගණක ඉබේම වැඩ කරන්න පටන් අරන් ඔයාගේ APK එක හදන්න ගන්නවා.
+
+ඔබේ GitHub Repository එකේ උඩින්ම තියෙන "Actions" කියන Tab එකට යන්න.
+එතන "Build Flutter APK" කියලා කොළ පාටින් හරි ලකුණක් (Tick එකක්) වැටිලා, විනාඩි 3 කින් විතර ඒ ක්‍රියාවලිය සම්පූර්ණ වේවි.
+ඒක උඩ ක්ලික් කරලා පහළට යද්දී, "Artifacts" කියන කොටස යටතේ wastage-tracker-apk කියලා ZIP File එකක් බලාගන්න පුළුවන් වෙයි.
+ඒ ZIP File එක Download කරලා Extract කරාම ඒක ඇතුලේ ඔබේ App එකේ app-release.apk කියන ෆයිල් එක තියෙනවා.
+දැන් ඒ APK එක ඕනෙම ෆෝන් එකකට යවලා Install කරගන්න පුළුවන්.
+
+💡 විකල්ප ක්‍රමයක් (Online IDE) ඔබට අනාගතයේදී GitHub පාවිච්චි නොකර අන්තර්ජාලයෙන්ම Code එක Edit කරලා, Run කරලා කෙලින්ම APK එක ගන්න ඕනේ නම් FlutLab.io වැනි වෙබ් අඩවියකට ගොස් මේ Project එකේ ZIP එක එතනට Upload කරලත් ඉතා පහසුවෙන් මේ දේ කරගැනීමට හැකියාව තියෙනවා.
+
+
+
+
+
+
+
+
+ඔබ Flutter සාර්ථකව Install කරගෙන තිබෙන බව පේනවා. නමුත් මම දැන් ඔබේ පරිගණකයේ flutter build apk විධානය run කරලා බලන්න හැදුවාම, ඒක සාර්ථක වුණේ නැහැ.
+
+එයට හේතුව තමයි Android SDK එක ඔබේ පරිගණකයේ නැති වීම. Android App එකක් (APK) හදන්න අනිවාර්යයෙන්ම Android SDK එක අවශ්‍ය වෙනවා.
+
+මම ඔබේ Project එක ඇතුලේ ඉඳන් flutter doctor කියන විධානය Run කළාම ආපු Error එක තමයි මේ:
+
+Unable to locate Android SDK. Install Android Studio from...
+
+ඔබට APK එක හදාගන්න නම්, මේ පියවර අනුගමනය කරන්නම වෙනවා:
+
+🛠️ Android SDK එක දාගන්න විදිය:
+Android Studio Dwnload කරගන්න: මේ ලින්ක් එකෙන් (Android Studio) ගිහින් Android Studio ඔබේ පරිගණකයට ඩවුන්ලෝඩ් කරලා Install කරන්න.
+First Setup (මුල් සැකසුම): Install කරලා ඉවර වෙලා Android Studio එක පළවෙනි පාරට Open කරාම, එයාගෙන්ම අහනවා "Android SDK" දාගන්නද කියලා. ඒක අනිවාර්යයෙන්ම Standard Settings දීලා Next කරලා Install වෙන්න අරින්න. (මේකට ටිකක් Data/Internet කපෙයි, මොකද SDK එක 2GB විතර වෙනවා).
+Android Studio එකේ SDK Manager එකට යන්න: SDK එක Install උනාට පස්සේ Android Studio එකේ උඩින් තියෙන More Actions -> SDK Manager (හෝ Tools -> SDK Manager) එකට යන්න.
+Command-line Tools දාගන්න: එහි දෙවෙනි ටැබ් එක වන SDK Tools කියන එකට ගිහින්, "Android SDK Command-line Tools (latest)" කියන එකට හරි ලකුණක් (Tick) එකක් දාලා පහලින් Apply කරලා ඒකත් Install කරගන්න.
+Flutter එකට මග පෙන්වීම (Paths හදමු): සාමාන්‍යයෙන් Android Studio දැම්මට පස්සේ ඉබේම Flutter එකට SDK එක අහුවෙනවා. නමුත් ඔබේ flutter විධානය තවම Environment Variables වලට දාලා නැහැ. (ඒක තියෙන්නේ C:\Users\DELL\Downloads\flutter_windows_3.41.4-stable\flutter\bin කියන තැන). අනිවාර්යයෙන්ම ඒ path එක System Path එකට ඇතුළත් කරන්න.
+📦 මේ සියල්ල කළ පසු APK එක හදාගන්න විදිය (Build APK)
+මේ ටික කරලා ඉවර වුණාම ඔයාට පුළුවන් VS Code එකේ Terminal එක හරි CMD එක හරි Open කරලා cd c:\Users\DELL\Desktop\SATA\westage\wastage_tracker විධානයෙන් Project එකට ගිහින්, මේ විධානය දෙන්න:
+
+bash
+flutter build apk --release
+එවිට විනාඩි කිහිපයකින් build\app\outputs\flutter-apk\ කියන ෆෝල්ඩර් එක ඇතුලේ app-release.apk කියලා ඔබේ app එක හැදෙනවා. ඒක ඕනෙම කෙනෙකුට යවලා Install කරගන්න පුළුවන්.
+
+(ඔබට Android Studio දාගන්න අපහසු නම්, මට කියන්න මම ඒක තවත් සරලව Step by step කියලා දෙන්නම්.)
+

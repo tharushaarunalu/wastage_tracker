@@ -1,0 +1,48 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+.idea/
+
+# IntelliJ-specific files
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+*.iml
+*.ipr
+
+# Visual Studio Code-specific files
+.vscode/
+
+# Flutter-specific files
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+/build/
+
+# Android-specific files
+/android/key.properties
+/android/app/src/main/res/values/strings.xml
+*.jks
+*.keystore
+*.apk
+*.aab
+
+# iOS-specific files
+/ios/Flutter/Generated.xcconfig
+/ios/Flutter/flutter_export_environment.sh
+/ios/Flutter/Flutter.podspec
+/ios/Runner/GeneratedPluginRegistrant.h
+/ios/Runner/GeneratedPluginRegistrant.m
+/ios/Pods/
+/ios/.symlinks/
+/ios/Podfile.lock
