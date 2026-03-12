@@ -33,7 +33,7 @@ class PdfService {
             pw.SizedBox(height: 20),
             items.isEmpty 
               ? pw.Text("No wastage recorded for this date.", style: pw.TextStyle(fontStyle: pw.FontStyle.italic))
-              : pw.TableHelper.fromTextArray(
+              : pw.Table.fromTextArray(
                   context: context,
                   cellAlignment: pw.Alignment.centerLeft,
                   headerDecoration: const pw.BoxDecoration(
