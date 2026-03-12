@@ -16,8 +16,6 @@ jobs:
         with:
           flutter-version: '3.19.0'
           channel: 'stable'
-      - name: Repair project structure
-        run: flutter create . --overwrite
       - name: Install dependencies
         run: flutter pub get
       - name: Build APK
