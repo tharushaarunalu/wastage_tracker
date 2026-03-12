@@ -60,4 +60,10 @@ class DatabaseHelper {
     final db = await database;
     return await db.delete('wastage', where: 'id = ?', whereArgs: [id]);
   }
+
+  Future<List<String>> getUniqueItemNames() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.rawQuery('SELECT DISTINCT name FROM wastage ORDER BY name ASC');
+    return maps.map((map) => map['name'] as String).toList();
+  }
 }

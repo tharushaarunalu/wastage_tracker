@@ -12,7 +12,7 @@ class WastageTrackerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Wastage Tracker',
+      title: 'wastage tracker - Tharusha',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(

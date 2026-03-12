@@ -16,17 +16,28 @@ class _HomeScreenState extends State<HomeScreen> {
   final _nameController = TextEditingController();
   final _weightController = TextEditingController();
   String _selectedCategory = 'Vegetables';
+  String _selectedUnit = 'kg';
   
   final DatabaseHelper _dbHelper = DatabaseHelper();
   List<WastageItem> _todayItems = [];
+  List<String> _itemSuggestions = [];
   bool _isLoading = true;
 
   final List<String> _categories = ['Vegetables', 'Fruits', 'Bakery', 'Dairy', 'Meat', 'Other'];
+  final List<String> _units = ['kg', 'g'];
 
   @override
   void initState() {
     super.initState();
     _loadTodayWastage();
+    _loadItemSuggestions();
+  }
+
+  Future<void> _loadItemSuggestions() async {
+    final suggestions = await _dbHelper.getUniqueItemNames();
+    if (mounted) {
+      setState(() => _itemSuggestions = suggestions);
+    }
   }
 
   Future<void> _loadTodayWastage() async {
@@ -37,10 +48,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _saveWastage() async {
     if (_formKey.currentState!.validate()) {
+      double parsedWeight = double.parse(_weightController.text.trim());
+      if (_selectedUnit == 'g') {
+        parsedWeight = parsedWeight / 1000.0;
+      }
+
       final newItem = WastageItem(
         name: _nameController.text.trim(),
         category: _selectedCategory,
-        weight: double.parse(_weightController.text.trim()),
+        weight: parsedWeight,
         date: DateTime.now(),
       );
 
@@ -48,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
       
       _nameController.clear();
       _weightController.clear();
+      setState(() { _selectedUnit = 'kg'; });
       
       if(mounted){
         ScaffoldMessenger.of(context).showSnackBar(
@@ -55,6 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       }
       
+      _loadItemSuggestions();
       _loadTodayWastage();
     }
   }
@@ -71,11 +89,22 @@ class _HomeScreenState extends State<HomeScreen> {
     await PdfService.generateDailyReport(_todayItems, DateTime.now());
   }
 
+  Widget _buildWeightChip(String value, String unit) {
+    return ActionChip(
+      label: Text('$value$unit'),
+      onPressed: () {
+        _weightController.text = value;
+        setState(() => _selectedUnit = unit);
+      },
+      visualDensity: VisualDensity.compact,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Wastage Tracker'),
+        title: const Text('wastage tracker - Tharusha', style: TextStyle(fontSize: 18)),
         elevation: 0,
         actions: [
           IconButton(
@@ -113,6 +142,22 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         validator: (value) => value == null || value.isEmpty ? 'Please enter item name' : null,
                       ),
+                      if (_itemSuggestions.isNotEmpty) ...[
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 4.0,
+                          runSpacing: -8.0,
+                          children: _itemSuggestions.take(10).map((name) {
+                            return ActionChip(
+                              label: Text(name),
+                              visualDensity: VisualDensity.compact,
+                              onPressed: () {
+                                _nameController.text = name;
+                              },
+                            );
+                          }).toList(),
+                        ),
+                      ],
                       const SizedBox(height: 16),
                       DropdownButtonFormField<String>(
                         value: _selectedCategory,
@@ -134,19 +179,64 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                       ),
                       const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _weightController,
-                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                        decoration: const InputDecoration(
-                          labelText: 'Weight (kg)',
-                          prefixIcon: Icon(Icons.scale),
-                          border: OutlineInputBorder(),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) return 'Please enter weight';
-                          if (double.tryParse(value) == null) return 'Please enter a valid number';
-                          return null;
-                        },
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: TextFormField(
+                              controller: _weightController,
+                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                              decoration: const InputDecoration(
+                                labelText: 'Weight/Amount',
+                                prefixIcon: Icon(Icons.scale),
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) return 'Please enter weight';
+                                if (double.tryParse(value) == null) return 'Please enter a valid number';
+                                return null;
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            flex: 1,
+                            child: DropdownButtonFormField<String>(
+                              value: _selectedUnit,
+                              decoration: const InputDecoration(
+                                labelText: 'Unit',
+                                border: OutlineInputBorder(),
+                              ),
+                              items: _units.map((unit) {
+                                return DropdownMenuItem(
+                                  value: unit,
+                                  child: Text(unit),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                if (value != null) {
+                                  setState(() => _selectedUnit = value);
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 4.0,
+                        runSpacing: -8.0,
+                        children: [
+                          _buildWeightChip('100', 'g'),
+                          _buildWeightChip('250', 'g'),
+                          _buildWeightChip('500', 'g'),
+                          _buildWeightChip('750', 'g'),
+                          _buildWeightChip('1', 'kg'),
+                          _buildWeightChip('2', 'kg'),
+                          _buildWeightChip('5', 'kg'),
+                          _buildWeightChip('10', 'kg'),
+                        ],
                       ),
                       const SizedBox(height: 24),
                       ElevatedButton.icon(
